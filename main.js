@@ -28,45 +28,26 @@ var BLAST_ARM_MS = 35;
 var BLAST_HALF = GRID * 0.34;
 
 var KIFU_RAW = [
-  ['B',16,3], ['W',3,3], ['B',15,15], ['W',14,3], ['B',3,15], ['W',15,5], ['B',14,2], ['W',13,2],
-  ['B',15,2], ['W',12,3], ['B',5,2], ['W',7,3], ['B',5,4], ['W',3,5], ['B',3,1], ['W',6,2],
-  ['B',6,3], ['W',7,2], ['B',2,2], ['W',5,1], ['B',4,1], ['W',4,2], ['B',5,3], ['W',6,1],
-  ['B',4,3], ['W',2,8], ['B',9,16], ['W',2,3], ['B',3,2], ['W',7,5], ['B',2,5], ['W',1,3],
-  ['B',3,4], ['W',2,4], ['B',3,6], ['W',4,5], ['B',6,5], ['W',2,6], ['B',7,6], ['W',8,5],
-  ['B',1,5], ['W',4,6], ['B',1,6], ['W',4,4], ['B',2,7], ['W',3,7], ['B',6,7], ['W',1,7],
-  ['B',8,6], ['W',9,5], ['B',9,14], ['W',10,7], ['B',15,13], ['W',2,6], ['B',5,15], ['W',17,4],
-  ['B',17,3], ['W',15,16], ['B',16,16], ['W',16,17], ['B',14,16], ['W',15,17], ['B',14,17], ['W',16,15],
-  ['B',17,16], ['W',15,14], ['B',14,15], ['W',16,14], ['B',17,17], ['W',14,14], ['B',15,11], ['W',13,15],
-  ['B',13,14], ['W',14,13], ['B',12,14], ['W',14,11], ['B',14,10], ['W',13,11], ['B',15,9], ['W',13,10],
-  ['B',13,9], ['W',12,9], ['B',13,8], ['W',16,10], ['B',15,10], ['W',17,12], ['B',15,7], ['W',17,6],
-  ['B',16,9], ['W',17,10], ['B',17,7], ['W',13,17], ['B',16,18], ['W',13,6], ['B',16,11], ['W',17,11],
-  ['B',16,13], ['W',17,13], ['B',16,6], ['W',16,5], ['B',18,6], ['W',18,5], ['B',17,5], ['W',13,16],
-  ['B',15,18], ['W',17,6], ['B',17,15], ['W',17,14], ['B',17,5], ['W',7,8], ['B',8,8], ['W',17,6],
-  ['B',8,9], ['W',18,7], ['B',14,8], ['W',17,1], ['B',16,1], ['W',18,3], ['B',17,2], ['W',18,2],
-  ['B',16,0], ['W',18,1], ['B',13,1], ['W',12,1], ['B',14,0], ['W',15,3], ['B',15,1], ['W',12,0],
-  ['B',13,0], ['W',2,16], ['B',2,15], ['W',3,17], ['B',3,16], ['W',1,17], ['B',4,17], ['W',1,15],
-  ['B',1,14], ['W',5,17], ['B',4,18], ['W',0,16], ['B',3,18], ['W',2,17], ['B',2,11], ['W',4,11],
-  ['B',2,13], ['W',9,17], ['B',10,17], ['W',8,16], ['B',9,15], ['W',5,16], ['B',4,16], ['W',6,15],
-  ['B',5,14], ['W',7,17], ['B',9,18], ['W',8,18], ['B',8,17], ['W',17,8], ['B',16,8], ['W',9,17],
-  ['B',10,18], ['W',6,14], ['B',6,13], ['W',7,13], ['B',7,12], ['W',8,13], ['B',6,12], ['W',8,15],
-  ['B',6,16], ['W',8,14], ['B',6,17], ['W',9,13], ['B',10,13], ['W',10,14], ['B',11,14], ['W',10,12],
-  ['B',10,15], ['W',9,11], ['B',1,2], ['W',2,10], ['B',1,10], ['W',3,10], ['B',0,3], ['W',0,4],
-  ['B',0,2], ['W',0,6], ['B',14,6], ['W',17,9], ['B',13,5], ['W',12,6], ['B',14,5], ['W',12,5],
-  ['B',13,4], ['W',13,3], ['B',1,9], ['W',11,13], ['B',8,17], ['W',7,16], ['B',5,18], ['W',9,17],
-  ['B',0,14], ['W',0,15], ['B',8,17], ['W',6,8], ['B',5,8], ['W',7,10], ['B',5,6], ['W',5,9],
-  ['B',4,8], ['W',9,7], ['B',8,7], ['W',4,9], ['B',10,9], ['W',4,13], ['B',7,9], ['W',6,9],
-  ['B',5,13], ['W',8,10], ['B',5,5], ['W',3,8], ['B',5,7], ['W',7,7], ['B',7,4], ['W',8,4],
-  ['B',9,6], ['W',10,6], ['B',10,8], ['W',12,8], ['B',10,5], ['W',10,4], ['B',1,0], ['W',9,17],
-  ['B',2,18], ['W',1,18], ['B',8,17], ['W',16,4], ['B',16,2], ['W',9,17], ['B',0,17], ['W',0,18],
-  ['B',8,17], ['W',1,1], ['B',0,1], ['W',9,17], ['B',12,4], ['W',11,5], ['B',8,17], ['W',2,0],
-  ['B',2,1], ['W',9,17], ['B',7,15], ['W',7,14], ['B',8,17], ['W',7,18], ['B',12,12], ['W',11,12],
-  ['B',13,12], ['W',14,12], ['B',12,11], ['W',11,11], ['B',11,16], ['W',3,12], ['B',8,12], ['W',9,12],
-  ['B',2,12], ['W',5,11], ['B',4,14], ['W',3,13], ['B',1,8], ['W',0,8], ['B',6,11], ['W',6,10],
-  ['B',0,9], ['W',0,7], ['B',14,4], ['W',15,4], ['B',11,4], ['W',11,3], ['B',15,6], ['W',13,7],
-  ['B',11,8], ['W',16,7], ['B',14,7], ['W',11,7], ['B',5,0], ['W',6,0], ['B',4,0], ['W',2,9],
-  ['B',1,12], ['W',17,0], ['B',18,14], ['W',18,13], ['B',18,15], ['W',10,10], ['B',12,10], ['W',9,9],
-  ['B',9,8], ['W',11,9], ['B',6,6], ['W',11,10], ['B',3,14], ['W',3,11], ['B',5,12], ['W',10,14],
-  ['B',9,17], ['W',10,13], ['B',6,4], ['W',17,7], ['B',9,10]
+  ['B',16,3], ['W',3,15], ['B',3,2], ['W',16,15], ['B',2,16], ['W',2,15], ['B',3,16], ['W',5,16],
+  ['B',5,17], ['W',3,3], ['B',2,3], ['W',2,4], ['B',4,3], ['W',3,4], ['B',2,2], ['W',6,17],
+  ['B',4,16], ['W',5,15], ['B',4,15], ['W',4,14], ['B',5,14], ['W',4,13], ['B',1,15], ['W',1,14],
+  ['B',1,16], ['W',2,12], ['B',5,13], ['W',4,17], ['B',4,12], ['W',3,13], ['B',3,17], ['W',5,12],
+  ['B',7,14], ['W',8,15], ['B',8,14], ['W',9,15], ['B',9,14], ['W',10,15], ['B',4,11], ['W',6,12],
+  ['B',6,15], ['W',6,16], ['B',2,10], ['W',1,10], ['B',2,9], ['W',1,9], ['B',1,8], ['W',7,11],
+  ['B',10,14], ['W',4,10], ['B',11,15], ['W',2,8], ['B',11,16], ['W',5,18], ['B',5,10], ['W',4,9],
+  ['B',3,8], ['W',2,7], ['B',4,8], ['W',5,9], ['B',1,7], ['W',3,9], ['B',2,6], ['W',3,7],
+  ['B',8,17], ['W',9,17], ['B',10,17], ['W',9,18], ['B',5,8], ['W',2,11], ['B',3,6], ['W',4,7],
+  ['B',4,4], ['W',5,7], ['B',6,8], ['W',6,7], ['B',15,16], ['W',16,16], ['B',15,15], ['W',15,14],
+  ['B',16,17], ['W',17,17], ['B',15,17], ['W',16,13], ['B',17,14], ['W',16,14], ['B',16,11], ['W',11,14],
+  ['B',13,14], ['W',11,13], ['B',9,11], ['W',13,13], ['B',14,13], ['W',14,14], ['B',13,15], ['W',13,12],
+  ['B',6,9], ['W',3,10], ['B',9,9], ['W',4,5], ['B',3,5], ['W',7,13], ['B',10,12], ['W',15,10],
+  ['B',14,11], ['W',15,11], ['B',14,12], ['W',0,15], ['B',14,10], ['W',16,10], ['B',16,8], ['W',14,9],
+  ['B',12,11], ['W',14,2], ['B',11,2], ['W',16,6], ['B',6,14], ['W',8,16], ['B',15,2], ['W',14,3],
+  ['B',15,4], ['W',14,6], ['B',14,4], ['W',12,3], ['B',2,14], ['W',3,14], ['B',17,10], ['W',13,9],
+  ['B',17,11], ['W',15,12], ['B',12,10], ['W',16,7], ['B',17,8], ['W',17,13], ['B',15,8], ['W',14,7],
+  ['B',14,8], ['W',13,8], ['B',17,5], ['W',18,7], ['B',12,5], ['W',12,7], ['B',13,6], ['W',13,5],
+  ['B',13,4], ['W',11,3], ['B',12,2], ['W',10,2], ['B',14,1], ['W',10,1], ['B',7,2], ['W',13,1],
+  ['B',13,2], ['W',13,3], ['B',12,1], ['W',8,3], ['B',7,3], ['W',8,4], ['B',6,10], ['W',5,11]
 ];
 var KIFU = KIFU_RAW.map(function(m, i) {
   return { color:m[0], x:m[1], y:m[2], move:i+1 };
@@ -139,9 +120,6 @@ phina.define('MainScene', {
 
     var s=gridToWorld(this.playerGridX,this.playerGridY);
     this.player=Player().setPosition(s.x,s.y).addChildTo(this.effectLayer);
-    this.stepsLabel=Label({text:'STEPS  ● ● ●',fontSize:24,fill:'#75f2ba',fontWeight:'bold',align:'left'}).setPosition(35,855).addChildTo(this.uiLayer); this.stepsLabel.origin.set(0,0.5);
-    Label({text:'タッチしてドラッグ / PC: WASD・矢印キー',fontSize:20,fill:'#bdb4a8'})
-      .setPosition(SCREEN_W/2,1235).addChildTo(this.uiLayer);
 
     this.joyBase=CircleShape({radius:58,fill:'rgba(255,255,255,.10)',stroke:'rgba(255,255,255,.4)',strokeWidth:3}).addChildTo(this.uiLayer); this.joyBase.hide();
     this.joyKnob=CircleShape({radius:25,fill:'rgba(255,255,255,.55)',stroke:'rgba(255,255,255,.8)',strokeWidth:2}).addChildTo(this.uiLayer); this.joyKnob.hide();
@@ -159,7 +137,7 @@ phina.define('MainScene', {
     var self=this;
     this.overlay=RectangleShape({width:SCREEN_W,height:SCREEN_H,fill:'rgba(10,8,6,.80)',stroke:null})
       .setPosition(SCREEN_W/2,SCREEN_H/2).addChildTo(this.uiLayer);
-    Label({text:'棋譜ボム',fontSize:62,fill:'#fff',fontWeight:'bold'}).setPosition(0,-300).addChildTo(this.overlay);
+    Label({text:'盤上サバイバル',fontSize:62,fill:'#fff',fontWeight:'bold'}).setPosition(0,-300).addChildTo(this.overlay);
     Label({text:'碁石が爆発します。３歩で避難してください。\n追いかけてくる敵にも注意しましょう。',fontSize:25,fill:'#eee5d8',lineHeight:1.5})
       .setPosition(0,-135).addChildTo(this.overlay);
     var button=RectangleShape({width:280,height:76,fill:'#e8b44d',stroke:'#fff1bd',strokeWidth:3})
@@ -171,16 +149,16 @@ phina.define('MainScene', {
   createPortraitControls:function(){
     var self=this;
     this.padCenter={x:360,y:1060};
-    CircleShape({radius:112,fill:'rgba(255,255,255,.06)',stroke:'rgba(255,255,255,.22)',strokeWidth:3})
+    CircleShape({radius:170,fill:'rgba(255,255,255,.06)',stroke:'rgba(255,255,255,.22)',strokeWidth:3})
       .setPosition(this.padCenter.x,this.padCenter.y).addChildTo(this.uiLayer);
     var defs=[
-      {text:'▲',x:360,y:985,dx:0,dy:-1}, {text:'▼',x:360,y:1135,dx:0,dy:1},
-      {text:'◀',x:285,y:1060,dx:-1,dy:0}, {text:'▶',x:435,y:1060,dx:1,dy:0}
+      {text:'▲',x:360,y:925,dx:0,dy:-1}, {text:'▼',x:360,y:1195,dx:0,dy:1},
+      {text:'◀',x:225,y:1060,dx:-1,dy:0}, {text:'▶',x:495,y:1060,dx:1,dy:0}
     ];
     defs.forEach(function(d){
-      var b=CircleShape({radius:42,fill:'rgba(255,255,255,.16)',stroke:'rgba(255,255,255,.45)',strokeWidth:2})
+      var b=CircleShape({radius:66,fill:'rgba(255,255,255,.16)',stroke:'rgba(255,255,255,.45)',strokeWidth:3})
         .setPosition(d.x,d.y).addChildTo(self.uiLayer); b.setInteractive(true);
-      Label({text:d.text,fontSize:28,fill:'#fff'}).addChildTo(b);
+      Label({text:d.text,fontSize:42,fill:'#fff',fontWeight:'bold'}).addChildTo(b);
       b.on('pointstart',function(){if(self.state==='thinking')self.tryGridStep(d.dx,d.dy);});
     });
   },
@@ -245,13 +223,25 @@ phina.define('MainScene', {
     if(this.enemyNeedsSpawn)this.spawnEnemy();
     var m=KIFU[this.moveIndex],p=gridToWorld(m.x,m.y);
     this.target={move:m,x:p.x,y:p.y,blast:null};
-    this.stepsLeft=STEPS_PER_TURN; this.updateStepsLabel();
+    this.stepsLeft=STEPS_PER_TURN;
     this.state='thinking'; this.releaseJoystick();
   },
-  updateStepsLabel:function(){
-    var text='STEPS  ';
-    for(var i=0;i<STEPS_PER_TURN;i++)text+=(i<this.stepsLeft?'●':'○')+(i<STEPS_PER_TURN-1?' ': '');
-    this.stepsLabel.text=text; this.stepsLabel.fill=this.stepsLeft>0?'#75f2ba':'#8e877d';
+  updateStepsLabel:function(){},
+  showStepCountdown:function(number){
+    var label=Label({
+      text:String(number),
+      fontSize:150,
+      fill:'#ffffff',
+      fontWeight:'bold',
+      stroke:'#2a160d',
+      strokeWidth:10
+    }).setPosition(BOARD_LEFT+BOARD_SIZE/2,BOARD_TOP+BOARD_SIZE/2).addChildTo(this.uiLayer);
+    label.alpha=0;
+    label.scaleX=.45; label.scaleY=.45;
+    label.tweener
+      .to({alpha:1,scaleX:1.15,scaleY:1.15},70,'easeOutQuad')
+      .to({alpha:0,scaleX:1.45,scaleY:1.45},210,'easeInQuad')
+      .call(function(){label.remove();});
   },
   lockAndDrop:function(skipEnemyMove){
     if(this.state!=='thinking')return;
@@ -342,12 +332,12 @@ phina.define('MainScene', {
     this.state = 'ended';
     this.showResult('GAME OVER');
   },
-    finishGame:function(){this.clearWarning();this.clearAllBlasts();this.state='ended';this.releaseJoystick();this.showResult('SURVIVED!');},
+    finishGame:function(){this.clearWarning();this.clearAllBlasts();this.state='ended';this.releaseJoystick();this.showResult('CLEAR!');},
   showResult:function(title){
     var self=this,panel=RectangleShape({width:285,height:280,fill:'rgba(20,15,10,.92)',stroke:'#e8b44d',strokeWidth:4})
       .setPosition(SCREEN_W/2,1010).addChildTo(this.uiLayer);
-    Label({text:title,fontSize:36,fill:title==='SURVIVED!'?'#75f2ba':'#ff7262',fontWeight:'bold'}).setPosition(0,-78).addChildTo(panel);
-    Label({text:'SURVIVED\n'+this.moveIndex+' MOVES',fontSize:25,fill:'#fff',lineHeight:1.35}).setPosition(0,-5).addChildTo(panel);
+    Label({text:title,fontSize:36,fill:title==='CLEAR!'?'#75f2ba':'#ff7262',fontWeight:'bold'}).setPosition(0,-78).addChildTo(panel);
+    Label({text:this.moveIndex+' 手',fontSize:25,fill:'#fff',lineHeight:1.35}).setPosition(0,-5).addChildTo(panel);
     var retry=RectangleShape({width:205,height:58,fill:'#e8b44d',stroke:'#fff1bd',strokeWidth:3}).setPosition(0,88).addChildTo(panel);
     Label({text:'RETRY',fontSize:26,fill:'#30200e',fontWeight:'bold'}).addChildTo(retry);
     retry.setInteractive(true);retry.on('pointstart',function(){self.exit('main');});
@@ -372,7 +362,7 @@ phina.define('MainScene', {
     else{if(dy)c.push([0,dy>0?1:-1]);if(dx)c.push([dx>0?1:-1,0]);}
     for(var i=0;i<c.length;i++){
       var x=this.enemyGridX+c[i][0],y=this.enemyGridY+c[i][1],p=gridToWorld(x,y);
-      if(x<0||x>=BOARD_N||y<0||y>=BOARD_N)continue;
+      if(x<0||x>=BOARD_N||y<0||y>=BOARD_N || this.collidesStone(p.x, p.y))continue;
       this.enemyGridX=x;this.enemyGridY=y;var self=this;
       this.enemy.tweener.clear().to({x:p.x,y:p.y},ENEMY_STEP_MS,'easeOutQuad').call(function(){if(self.enemyGridX===self.playerGridX&&self.enemyGridY===self.playerGridY)self.beginDeath('CAUGHT!');});
       break;
@@ -409,7 +399,7 @@ phina.define('MainScene', {
     if(this.collidesStone(p.x,p.y))return;
     var self=this;
     this.stepMoving=true;
-    this.playerGridX=gx; this.playerGridY=gy; this.stepsLeft--; this.updateStepsLabel();
+    this.playerGridX=gx; this.playerGridY=gy;this.stepsLeft--; this.showStepCountdown(this.stepsLeft);
     this.player.tweener.clear().to({x:p.x,y:p.y},STEP_MS,'easeOutQuad').call(function(){self.stepMoving=false;self.moveEnemyTowardPlayer();if(self.state!=='dying'&&self.stepsLeft<=0)self.lockAndDrop(true);});
   },
   updatePlayer:function(app){
