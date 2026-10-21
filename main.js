@@ -168,6 +168,7 @@ phina.define('MainScene', {
   releaseJoystick:function(){this.joyActive=false;this.moveX=0;this.moveY=0;this.joyBase.hide();this.joyKnob.hide();},
 
   startGame:function(){
+    SoundManager.play('selectSound');
     if(this.overlay){this.overlay.remove();this.overlay=null;}
     this.state='waiting'; this.timer=500; this.showMessage('READY','#fff');
   },
@@ -273,6 +274,7 @@ phina.define('MainScene', {
     var t=this.target;
     if(this.fallingStone)this.fallingStone.remove();
     var placed=Stone(t.move.color).setPosition(t.x,t.y).addChildTo(this.stoneLayer); this.fallingStone=null;
+    SoundManager.play('stoneSound');
     this.placeGoStone(t.move,placed);
     t.blast=this.computeBlast(t.x,t.y);
     this.startBlast();
@@ -331,8 +333,9 @@ phina.define('MainScene', {
     // 待たずに即ゲームオーバー表示
     this.state = 'ended';
     this.showResult('GAME OVER');
+    SoundManager.play('gameOverSound');
   },
-    finishGame:function(){this.clearWarning();this.clearAllBlasts();this.state='ended';this.releaseJoystick();this.showResult('CLEAR!');},
+    finishGame:function(){SoundManager.play('gameClearSound');this.clearWarning();this.clearAllBlasts();this.state='ended';this.releaseJoystick();this.showResult('CLEAR!');},
   showResult:function(title){
     var self=this,panel=RectangleShape({width:285,height:280,fill:'rgba(20,15,10,.92)',stroke:'#e8b44d',strokeWidth:4})
       .setPosition(SCREEN_W/2,1010).addChildTo(this.uiLayer);
@@ -435,6 +438,12 @@ phina.main(function(){
         enemyImage: 'enemy.png',
         enemyHitImage: 'enemy2.png',
         fireImage: 'fire.png'
+      },
+      sound: {
+        selectSound: 'select.wav',
+        stoneSound: 'stone.wav',
+        gameOverSound: 'gameOver.wav',
+        gameClearSound: 'gameclear.wav'
       }
     }
   });
