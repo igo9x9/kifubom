@@ -149,12 +149,14 @@ phina.define('MainScene', {
 
   createPortraitControls:function(){
     var self=this;
-    this.padCenter={x:360,y:1060};
+    this.padCenter={x:360,y:925};
     CircleShape({radius:170,fill:'rgba(255,255,255,.06)',stroke:'rgba(255,255,255,.22)',strokeWidth:3})
       .setPosition(this.padCenter.x,this.padCenter.y).addChildTo(this.uiLayer);
     var defs=[
-      {text:'▲',x:360,y:925,dx:0,dy:-1}, {text:'▼',x:360,y:1195,dx:0,dy:1},
-      {text:'◀',x:225,y:1060,dx:-1,dy:0}, {text:'▶',x:495,y:1060,dx:1,dy:0}
+  {text:'▲',x:360,y:800, dx:0, dy:-1},
+  {text:'▼',x:360,y:1050,dx:0, dy:1},
+  {text:'◀',x:235,y:925, dx:-1,dy:0},
+  {text:'▶',x:485,y:925, dx:1, dy:0}
     ];
     defs.forEach(function(d){
       var b=CircleShape({radius:66,fill:'rgba(255,255,255,.16)',stroke:'rgba(255,255,255,.45)',strokeWidth:3})
