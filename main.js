@@ -111,7 +111,6 @@ phina.define('MainScene', {
     this.stepMoving=false; this.stepCooldown=0; this.lastStepDir='';
     this.stepsLeft=STEPS_PER_TURN;
     this.enemy=null; this.enemyGridX=-1; this.enemyGridY=-1; this.enemyNeedsSpawn=true;
-    // プレイヤー3歩につき敵は2歩。3歩目だけ敵を休ませる。
     this.playerStepInTurn=0;
 
     GoBoard().addChildTo(this);
@@ -150,14 +149,12 @@ phina.define('MainScene', {
 
   createPortraitControls:function(){
     var self=this;
-    this.padCenter={x:360,y:910};
+    this.padCenter={x:360,y:1060};
     CircleShape({radius:170,fill:'rgba(255,255,255,.06)',stroke:'rgba(255,255,255,.22)',strokeWidth:3})
       .setPosition(this.padCenter.x,this.padCenter.y).addChildTo(this.uiLayer);
     var defs=[
-  {text:'▲',x:360,y:775, dx:0, dy:-1},
-  {text:'▼',x:360,y:1045,dx:0, dy:1},
-  {text:'◀',x:225,y:910, dx:-1,dy:0},
-  {text:'▶',x:495,y:910, dx:1, dy:0}
+      {text:'▲',x:360,y:925,dx:0,dy:-1}, {text:'▼',x:360,y:1195,dx:0,dy:1},
+      {text:'◀',x:225,y:1060,dx:-1,dy:0}, {text:'▶',x:495,y:1060,dx:1,dy:0}
     ];
     defs.forEach(function(d){
       var b=CircleShape({radius:66,fill:'rgba(255,255,255,.16)',stroke:'rgba(255,255,255,.45)',strokeWidth:3})
@@ -362,6 +359,7 @@ phina.define('MainScene', {
     var c=pool[Math.floor(Math.random()*pool.length)],p=gridToWorld(c.x,c.y);
     this.enemy=Enemy().setPosition(p.x,p.y).addChildTo(this.effectLayer);
     this.enemyGridX=c.x;this.enemyGridY=c.y;this.enemyNeedsSpawn=false;
+    this.enemyLastDx=0;this.enemyLastDy=0;
   },
   findEnemyNextStepByBFS:function(){
     if(!this.enemy)return null;
@@ -389,13 +387,77 @@ phina.define('MainScene', {
   },
   moveEnemyTowardPlayer:function(){
     if(!this.enemy)return;
-    var next=this.findEnemyNextStepByBFS();if(!next)return;
-    if(next.x===this.enemyGridX&&next.y===this.enemyGridY){this.beginDeath('CAUGHT!');return;}
-    this.enemyGridX=next.x;this.enemyGridY=next.y;
-    var p=gridToWorld(next.x,next.y),self=this;
-    this.enemy.tweener.clear().to({x:p.x,y:p.y},ENEMY_STEP_MS,'easeOutQuad').call(function(){
-      if(self.enemyGridX===self.playerGridX&&self.enemyGridY===self.playerGridY)self.beginDeath('CAUGHT!');
-    });
+
+    var dx=this.playerGridX-this.enemyGridX;
+    var dy=this.playerGridY-this.enemyGridY;
+    var currentDistance=Math.abs(dx)+Math.abs(dy);
+    var candidates=[];
+
+    // 前回と同じ方向で距離を縮められるなら、直進を最優先する。
+    if(this.enemyLastDx!==undefined&&(this.enemyLastDx!==0||this.enemyLastDy!==0)){
+      candidates.push({dx:this.enemyLastDx,dy:this.enemyLastDy,priority:0});
+    }
+
+    // プレイヤーとの差が大きい軸を優先し、従来の自然な接近を再現する。
+    if(Math.abs(dx)>=Math.abs(dy)){
+      if(dx!==0)candidates.push({dx:dx>0?1:-1,dy:0,priority:1});
+      if(dy!==0)candidates.push({dx:0,dy:dy>0?1:-1,priority:2});
+    }else{
+      if(dy!==0)candidates.push({dx:0,dy:dy>0?1:-1,priority:1});
+      if(dx!==0)candidates.push({dx:dx>0?1:-1,dy:0,priority:2});
+    }
+
+    var used={};
+    for(var i=0;i<candidates.length;i++){
+      var c=candidates[i];
+      var directionKey=c.dx+','+c.dy;
+      if(used[directionKey])continue;
+      used[directionKey]=true;
+
+      var nx=this.enemyGridX+c.dx;
+      var ny=this.enemyGridY+c.dy;
+      if(!this.insideBoard(nx,ny))continue;
+      if(this.board[ny][nx]!==null&&!(nx===this.playerGridX&&ny===this.playerGridY))continue;
+
+      var nextDistance=Math.abs(this.playerGridX-nx)+Math.abs(this.playerGridY-ny);
+      if(nextDistance>=currentDistance)continue;
+
+      this.moveEnemyToGrid(nx,ny,c.dx,c.dy);
+      return;
+    }
+
+    // 直接距離を縮める手が石で塞がれている場合だけ、BFSで迂回する。
+    var next=this.findEnemyNextStepByBFS();
+    if(!next)return;
+
+    if(next.x===this.enemyGridX&&next.y===this.enemyGridY){
+      this.beginDeath('CAUGHT!');
+      return;
+    }
+
+    this.moveEnemyToGrid(
+      next.x,
+      next.y,
+      next.x-this.enemyGridX,
+      next.y-this.enemyGridY
+    );
+  },
+
+  moveEnemyToGrid:function(x,y,moveDx,moveDy){
+    this.enemyGridX=x;
+    this.enemyGridY=y;
+    this.enemyLastDx=moveDx;
+    this.enemyLastDy=moveDy;
+
+    var p=gridToWorld(x,y);
+    var self=this;
+    this.enemy.tweener.clear()
+      .to({x:p.x,y:p.y},ENEMY_STEP_MS,'easeOutQuad')
+      .call(function(){
+        if(self.enemyGridX===self.playerGridX&&self.enemyGridY===self.playerGridY){
+          self.beginDeath('CAUGHT!');
+        }
+      });
   },
   enemyInBlastArea:function(b){
     if(!this.enemy)return false;var x=this.enemy.x,y=this.enemy.y,r=ENEMY_R;
@@ -432,12 +494,7 @@ phina.define('MainScene', {
     this.player.tweener.clear().to({x:p.x,y:p.y},STEP_MS,'easeOutQuad').call(function(){
       self.stepMoving=false;
       self.playerStepInTurn++;
-
-      // 1歩目・2歩目では敵も1歩進む。3歩目では敵は動かない。
-      if(self.playerStepInTurn<=2){
-        self.moveEnemyTowardPlayer();
-      }
-
+      if(self.playerStepInTurn<=2)self.moveEnemyTowardPlayer();
       if(self.state!=='dying'&&self.stepsLeft<=0)self.lockAndDrop(true);
     });
   },
