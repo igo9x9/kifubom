@@ -111,6 +111,8 @@ phina.define('MainScene', {
     this.stepMoving=false; this.stepCooldown=0; this.lastStepDir='';
     this.stepsLeft=STEPS_PER_TURN;
     this.enemy=null; this.enemyGridX=-1; this.enemyGridY=-1; this.enemyNeedsSpawn=true;
+    // プレイヤー3歩につき敵は2歩。3歩目だけ敵を休ませる。
+    this.playerStepInTurn=0;
 
     GoBoard().addChildTo(this);
     this.blastLayer=DisplayElement().addChildTo(this);
@@ -225,6 +227,7 @@ phina.define('MainScene', {
     var m=KIFU[this.moveIndex],p=gridToWorld(m.x,m.y);
     this.target={move:m,x:p.x,y:p.y,blast:null};
     this.stepsLeft=STEPS_PER_TURN;
+    this.playerStepInTurn=0;
     this.state='thinking'; this.releaseJoystick();
   },
   updateStepsLabel:function(){},
@@ -358,18 +361,39 @@ phina.define('MainScene', {
     this.enemy=Enemy().setPosition(p.x,p.y).addChildTo(this.effectLayer);
     this.enemyGridX=c.x;this.enemyGridY=c.y;this.enemyNeedsSpawn=false;
   },
+  findEnemyNextStepByBFS:function(){
+    if(!this.enemy)return null;
+    var sx=this.enemyGridX,sy=this.enemyGridY,gx=this.playerGridX,gy=this.playerGridY;
+    if(sx===gx&&sy===gy)return{x:sx,y:sy};
+    var queue=[{x:sx,y:sy}],head=0,visited={},previous={};
+    var startKey=this.boardKey(sx,sy),goalKey=this.boardKey(gx,gy);
+    visited[startKey]=true;
+    var dirs=[[0,-1],[-1,0],[1,0],[0,1]];
+    while(head<queue.length){
+      var cur=queue[head++],curKey=this.boardKey(cur.x,cur.y);
+      if(curKey===goalKey)break;
+      for(var i=0;i<dirs.length;i++){
+        var nx=cur.x+dirs[i][0],ny=cur.y+dirs[i][1];
+        if(!this.insideBoard(nx,ny))continue;
+        var key=this.boardKey(nx,ny);if(visited[key])continue;
+        if(!(nx===gx&&ny===gy)&&this.board[ny][nx]!==null)continue;
+        visited[key]=true;previous[key]=curKey;queue.push({x:nx,y:ny});
+      }
+    }
+    if(!visited[goalKey])return null;
+    var stepKey=goalKey;
+    while(previous[stepKey]&&previous[stepKey]!==startKey)stepKey=previous[stepKey];
+    var parts=stepKey.split(',');return{x:parseInt(parts[0],10),y:parseInt(parts[1],10)};
+  },
   moveEnemyTowardPlayer:function(){
     if(!this.enemy)return;
-    var dx=this.playerGridX-this.enemyGridX,dy=this.playerGridY-this.enemyGridY,c=[];
-    if(Math.abs(dx)>=Math.abs(dy)){if(dx)c.push([dx>0?1:-1,0]);if(dy)c.push([0,dy>0?1:-1]);}
-    else{if(dy)c.push([0,dy>0?1:-1]);if(dx)c.push([dx>0?1:-1,0]);}
-    for(var i=0;i<c.length;i++){
-      var x=this.enemyGridX+c[i][0],y=this.enemyGridY+c[i][1],p=gridToWorld(x,y);
-      if(x<0||x>=BOARD_N||y<0||y>=BOARD_N || this.collidesStone(p.x, p.y))continue;
-      this.enemyGridX=x;this.enemyGridY=y;var self=this;
-      this.enemy.tweener.clear().to({x:p.x,y:p.y},ENEMY_STEP_MS,'easeOutQuad').call(function(){if(self.enemyGridX===self.playerGridX&&self.enemyGridY===self.playerGridY)self.beginDeath('CAUGHT!');});
-      break;
-    }
+    var next=this.findEnemyNextStepByBFS();if(!next)return;
+    if(next.x===this.enemyGridX&&next.y===this.enemyGridY){this.beginDeath('CAUGHT!');return;}
+    this.enemyGridX=next.x;this.enemyGridY=next.y;
+    var p=gridToWorld(next.x,next.y),self=this;
+    this.enemy.tweener.clear().to({x:p.x,y:p.y},ENEMY_STEP_MS,'easeOutQuad').call(function(){
+      if(self.enemyGridX===self.playerGridX&&self.enemyGridY===self.playerGridY)self.beginDeath('CAUGHT!');
+    });
   },
   enemyInBlastArea:function(b){
     if(!this.enemy)return false;var x=this.enemy.x,y=this.enemy.y,r=ENEMY_R;
@@ -403,7 +427,17 @@ phina.define('MainScene', {
     var self=this;
     this.stepMoving=true;
     this.playerGridX=gx; this.playerGridY=gy;this.stepsLeft--; this.showStepCountdown(this.stepsLeft);
-    this.player.tweener.clear().to({x:p.x,y:p.y},STEP_MS,'easeOutQuad').call(function(){self.stepMoving=false;self.moveEnemyTowardPlayer();if(self.state!=='dying'&&self.stepsLeft<=0)self.lockAndDrop(true);});
+    this.player.tweener.clear().to({x:p.x,y:p.y},STEP_MS,'easeOutQuad').call(function(){
+      self.stepMoving=false;
+      self.playerStepInTurn++;
+
+      // 1歩目・2歩目では敵も1歩進む。3歩目では敵は動かない。
+      if(self.playerStepInTurn<=2){
+        self.moveEnemyTowardPlayer();
+      }
+
+      if(self.state!=='dying'&&self.stepsLeft<=0)self.lockAndDrop(true);
+    });
   },
   updatePlayer:function(app){
     if(this.state!=='thinking'||this.stepsLeft<=0||this.stepMoving)return;
