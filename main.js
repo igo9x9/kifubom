@@ -376,7 +376,7 @@ phina.define('MainScene', {
     return (x+r>=b.left&&x-r<=b.right&&Math.abs(y-b.cy)<=BLAST_HALF+r)||(y+r>=b.top&&y-r<=b.bottom&&Math.abs(x-b.cx)<=BLAST_HALF+r);
   },
   defeatEnemy:function(){
-    if(!this.enemy)return;var old=this.enemy,hit=EnemyHit().setPosition(old.x,old.y).addChildTo(this.effectLayer);old.remove();
+    if(!this.enemy)return;SoundManager.play('enemyHitSound'); var old=this.enemy,hit=EnemyHit().setPosition(old.x,old.y).addChildTo(this.effectLayer);old.remove();
     this.enemy=null;this.enemyGridX=-1;this.enemyGridY=-1;this.enemyNeedsSpawn=true;
     hit.tweener.clear().wait(220).to({alpha:0},180).call(function(){hit.remove();});
   },
@@ -443,7 +443,8 @@ phina.main(function(){
         selectSound: 'select.wav',
         stoneSound: 'stone.wav',
         gameOverSound: 'gameOver.wav',
-        gameClearSound: 'gameclear.wav'
+        gameClearSound: 'gameclear.wav',
+        enemyHitSound: 'enemyHit.wav'
       }
     }
   });
